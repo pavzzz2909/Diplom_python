@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 
     'rest_framework',
@@ -50,10 +51,45 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'drf_spectacular',
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
+
     'usermanager',
     'shopmanager',
     'ordermanager',
 ]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        # For each provider, you can choose whether or not the
+        # email address(es) retrieved from the provider are to be
+        # interpreted as verified.
+        "VERIFIED_EMAIL": True
+    },
+    "google": {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        "APP": {
+            "client_id": "",
+            "secret": "",
+            "key": ""
+        },
+        # These are provider-specific settings that can only be
+        # listed here:
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +114,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -94,7 +131,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'api_diplom_final',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'Lentyai777',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -173,7 +210,10 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend',
+                           'django.contrib.auth.backends.ModelBackend',
+                           'allauth.account.auth_backends.AuthenticationBackend',]
+
 
 # Email Settings:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
